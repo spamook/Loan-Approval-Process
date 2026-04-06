@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: loan_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: loan_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432" # Local port : port in container
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Savng data after restart
+
+volumes:
+  postgres_data:

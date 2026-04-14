@@ -4,6 +4,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "loan_application")
@@ -48,6 +49,10 @@ public class LoanApplication {
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+    
+    @Builder.Default
+    @OneToMany(mappedBy = "loanApplication", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PaymentInstallment> paymentSchedule = new java.util.ArrayList<>();
 
     @PrePersist
     protected void onCreate() {

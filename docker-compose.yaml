@@ -1,6 +1,22 @@
 version: '3.8'
 
 services:
+  app:
+    build: .
+    container_name: loan_app
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # Inject Docker DB host instead of 'localhost'
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/loan_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: password
+    depends_on:
+      - db
+    networks:
+      - loan_net
+
   db:
     image: postgres:15-alpine
     container_name: loan_postgres
@@ -12,7 +28,12 @@ services:
     ports:
       - "5432:5432" # Local port : port in container
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Savng data after restart
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - loan_net
+
+networks:
+  loan_net:
 
 volumes:
   postgres_data:
